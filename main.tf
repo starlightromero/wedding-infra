@@ -21,7 +21,7 @@ resource "digitalocean_project_resources" "this" {
 resource "digitalocean_firewall" "web" {
   name = "only-22-80-and-443"
 
-  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.droplet_id]
+  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool[*].droplet_id]
 
   inbound_rule {
     protocol         = "tcp"
@@ -61,7 +61,7 @@ resource "digitalocean_loadbalancer" "public" {
     protocol = "tcp"
   }
 
-  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.droplet_id]
+  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool[*].droplet_id]
 }
 
 resource "digitalocean_kubernetes_cluster" "this" {

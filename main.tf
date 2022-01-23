@@ -21,7 +21,7 @@ resource "digitalocean_project_resources" "this" {
 resource "digitalocean_firewall" "web" {
   name = "only-22-80-and-443"
 
-  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.*.droplet_id]
+  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.droplet_id]
 
   inbound_rule {
     protocol         = "tcp"
@@ -61,7 +61,7 @@ resource "digitalocean_loadbalancer" "public" {
     protocol = "tcp"
   }
 
-  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.*.droplet_id]
+  droplet_ids = [digitalocean_kubernetes_cluster.this.node_pool.droplet_id]
 }
 
 resource "digitalocean_kubernetes_cluster" "this" {
@@ -72,17 +72,8 @@ resource "digitalocean_kubernetes_cluster" "this" {
   node_pool {
     name       = "default-pool"
     size       = "s-1vcpu-2gb"
-    node_count = 2
+    auto_scale = true
+    min_nodes  = 1
+    max_nodes  = 3
   }
-}
-
-resource "digitalocean_kubernetes_node_pool" "this" {
-  cluster_id = digitalocean_kubernetes_cluster.this.id
-
-  name       = "app-pool"
-  size       = "s-2vcpu-4gb"
-  tags       = ["application"]
-  auto_scale = true
-  min_nodes  = 1
-  max_nodes  = 3
 }

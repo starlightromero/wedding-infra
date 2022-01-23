@@ -4,7 +4,7 @@ resource "digitalocean_domain" "this" {
 }
 
 resource "digitalocean_project" "wedding" {
-  name        = "wedding"
+  name        = "Wedding"
   description = "A project for all digital wedding assets."
   purpose     = "Web Application"
   environment = "Production"

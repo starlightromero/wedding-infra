@@ -92,3 +92,86 @@ resource "digitalocean_kubernetes_node_pool" "this" {
   min_nodes  = 1
   max_nodes  = 3
 }
+
+resource "kubernetes_namespace" "wedding-app" {
+  metadata {
+    name = "wedding-app"
+  }
+}
+
+
+resource "kubernetes_service" "wedding" {
+  metadata {
+    name = "wedding-sevice"
+    namespace = "wedding-app"
+  }
+
+  spec {
+    selector = {
+      app = kubernetes_deployment.wedding.metadata.0.labels.app
+    }
+    session_affinity = "ClientIP"
+    port {
+      port        = 8080
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
+resource "kubernetes_deployment" "wedding" {
+  metadata {
+    name = "wedding-deployment"
+    namespace = "wedding-app"
+    labels = {
+      app = "wedding"
+    }
+  }
+
+  spec {
+    replicas = 3
+
+    selector {
+      match_labels = {
+        app = "wedding"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "wedding"
+        }
+      }
+
+      spec {
+        container {
+          image = "starlightromero/wedding-app"
+          name  = "wedding-app"
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/health"
+              port = 80
+            }
+
+            initial_delay_seconds = 3
+            period_seconds        = 3
+          }
+        }
+      }
+    }
+  }
+}

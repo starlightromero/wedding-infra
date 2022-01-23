@@ -61,7 +61,7 @@ resource "digitalocean_loadbalancer" "public" {
     protocol = "tcp"
   }
 
-  droplet_ids = digitalocean_kubernetes_cluster.this.node_pool.droplet_id
+  droplet_ids = digitalocean_kubernetes_cluster.this.node_pool[0].droplet_id
 }
 
 resource "digitalocean_kubernetes_cluster" "this" {

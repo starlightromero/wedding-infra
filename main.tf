@@ -1,6 +1,6 @@
 resource "digitalocean_domain" "this" {
   name       = "charrington.xyz"
-  ip_address = digitalocean_loadbalancer.public.ip
+  ip_address = digitalocean_loadbalancer.this.ip
 }
 
 resource "digitalocean_project" "wedding" {
@@ -14,7 +14,7 @@ resource "digitalocean_project_resources" "this" {
   project = digitalocean_project.wedding.id
   resources = [
     digitalocean_domain.this.urn,
-    digitalocean_loadbalancer.public.urn,
+    digitalocean_loadbalancer.this.urn,
     digitalocean_kubernetes_cluster.this.urn
   ]
 }
@@ -33,18 +33,18 @@ resource "digitalocean_firewall" "web" {
   inbound_rule {
     protocol                  = "tcp"
     port_range                = "80"
-    source_load_balancer_uids = [digitalocean_loadbalancer.public.id]
+    source_load_balancer_uids = [digitalocean_loadbalancer.this.id]
   }
 
   inbound_rule {
     protocol                  = "tcp"
     port_range                = "443"
-    source_load_balancer_uids = [digitalocean_loadbalancer.public.id]
+    source_load_balancer_uids = [digitalocean_loadbalancer.this.id]
   }
 }
 
-resource "digitalocean_loadbalancer" "public" {
-  name   = "loadbalancer-1"
+resource "digitalocean_loadbalancer" "this" {
+  name   = "${var.cluster_name}-lb"
   region = var.do_region
 
   #  redirect_http_to_https = true
@@ -99,10 +99,99 @@ resource "kubernetes_namespace" "wedding-app" {
   }
 }
 
+resource "kubernetes_namespace" "ingress" {
+  metadata {
+    name = "ingress"
+  }
+}
+
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  version    = "v1.0.1"
+  namespace  = "kube-system"
+  timeout    = 120
+  depends_on = [
+    kubernetes_ingress.ingress,
+  ]
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
+
+resource "helm_release" "cluster-issuer" {
+  name      = "cluster-issuer"
+  chart     = "../helm_charts/cluster-issuer"
+  namespace = "kube-system"
+  depends_on = [
+    helm_release.cert-manager,
+  ]
+  set {
+    name  = "letsencrypt_email"
+    value = var.letsencrypt_email
+  }
+}
+
+resource "helm_release" "nginx_ingress_chart" {
+  name       = "nginx-ingress-controller"
+  namespace  = "ingress"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "nginx-ingress-controller"
+  set {
+    name  = "service.type"
+    value = "LoadBalancer"
+  }
+  set {
+    name  = "service.annotations.kubernetes\\.digitalocean\\.com/load-balancer-id"
+    value = digitalocean_loadbalancer.this.id
+  }
+  depends_on = [
+    digitalocean_loadbalancer.this,
+  ]
+}
+
+resource "kubernetes_ingress" "ingress" {
+  depends_on = [
+    helm_release.nginx_ingress_chart,
+  ]
+  metadata {
+    name      = "${var.cluster_name}-ingress"
+    namespace = "ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"          = "nginx"
+      "ingress.kubernetes.io/rewrite-target" = "/"
+      "cert-manager.io/cluster-issuer"       = "letsencrypt-production"
+    }
+  }
+  spec {
+    rule {
+      host = var.hostname
+      http {
+        path {
+          backend {
+            service_name = kubernetes_service.wedding.metadata.0.name
+            service_port = 80
+          }
+          path = "/"
+        }
+      }
+    }
+    tls {
+      secret_name = "wedding-tls"
+      hosts       = [var.hostname]
+    }
+  }
+}
 
 resource "kubernetes_service" "wedding" {
   metadata {
-    name = "wedding-sevice"
+    name      = "wedding-sevice"
     namespace = "wedding-app"
   }
 
@@ -122,7 +211,7 @@ resource "kubernetes_service" "wedding" {
 
 resource "kubernetes_deployment" "wedding" {
   metadata {
-    name = "wedding-deployment"
+    name      = "wedding-deployment"
     namespace = "wedding-app"
     labels = {
       app = "wedding"
@@ -149,6 +238,9 @@ resource "kubernetes_deployment" "wedding" {
         container {
           image = "starlightromero/wedding-app"
           name  = "wedding-app"
+          port {
+            container_port = 8080
+          }
 
           resources {
             limits = {

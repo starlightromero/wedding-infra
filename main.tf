@@ -45,7 +45,7 @@ resource "digitalocean_firewall" "web" {
 
 resource "digitalocean_loadbalancer" "public" {
   name   = "loadbalancer-1"
-  region = "sfo3"
+  region = var.do_region
 
   #  redirect_http_to_https = true
 
@@ -71,7 +71,7 @@ data "digitalocean_kubernetes_versions" "this" {
 
 resource "digitalocean_kubernetes_cluster" "this" {
   name         = "terraform-do-cluster"
-  region       = "sfo3"
+  region       = var.do_region
   version      = data.digitalocean_kubernetes_versions.this.latest_version
   auto_upgrade = true
 

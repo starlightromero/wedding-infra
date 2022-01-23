@@ -13,7 +13,7 @@ resource "digitalocean_project" "wedding" {
 resource "digitalocean_project_resources" "this" {
   project = digitalocean_project.wedding.id
   resources = [
-    digitalocean_load_balancer.public.id
+    digitalocean_load_balancer.public.id,
     digitalocean_kubernetes_cluster.this.id
   ]
 }
@@ -46,7 +46,7 @@ resource "digitalocean_loadbalancer" "public" {
   name   = "loadbalancer-1"
   region = "nyc3"
 
-#  redirect_http_to_https = true
+  #  redirect_http_to_https = true
 
   forwarding_rule {
     entry_port     = 80

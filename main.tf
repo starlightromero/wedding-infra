@@ -1,6 +1,6 @@
 resource "digitalocean_domain" "this" {
   name       = "charrington.xyz"
-  ip_address = digitalocean_droplet.foo.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
 
 resource "digitalocean_project" "wedding" {

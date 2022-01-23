@@ -13,10 +13,10 @@ resource "digitalocean_project" "wedding" {
 resource "digitalocean_project_resources" "this" {
   project = digitalocean_project.wedding.id
   resources = [
-    digitalocean_domain.this.id,
-    digitalocean_loadbalancer.public.id,
-    digitalocean_kubernetes_cluster.this.id,
-    digitalocean_kubernetes_node_pool.this.id
+    digitalocean_domain.this.urn,
+    digitalocean_loadbalancer.public.urn,
+    digitalocean_kubernetes_cluster.this.urn,
+    digitalocean_kubernetes_node_pool.this.urn
   ]
 }
 

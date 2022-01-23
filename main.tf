@@ -64,10 +64,14 @@ resource "digitalocean_loadbalancer" "public" {
   droplet_ids = digitalocean_kubernetes_node_pool.this.nodes[*].droplet_id
 }
 
+data "digitalocean_kubernetes_versions" "this" {
+  version_prefix = "1."
+}
+
 resource "digitalocean_kubernetes_cluster" "this" {
   name         = "terraform-do-cluster"
   region       = "sfo3"
-  version      = "1.20.2-do.0"
+  version      = data.digitalocean_kubernetes_versions.this.latest_version
   auto_upgrade = true
 
   node_pool {

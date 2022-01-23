@@ -44,7 +44,7 @@ resource "digitalocean_firewall" "web" {
 
 resource "digitalocean_loadbalancer" "public" {
   name   = "loadbalancer-1"
-  region = "nyc3"
+  region = "sfo3"
 
   #  redirect_http_to_https = true
 

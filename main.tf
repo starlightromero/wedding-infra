@@ -92,7 +92,7 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "v1.6.1"
-  namespace  = "kube-system"
+  namespace  = "wedding-app"
   timeout    = 120
   depends_on = [
     kubernetes_ingress.ingress,
@@ -110,7 +110,7 @@ resource "helm_release" "cert-manager" {
 resource "helm_release" "cluster-issuer" {
   name      = "cluster-issuer"
   chart     = "./helm_charts/cluster-issuer"
-  namespace = "kube-system"
+  namespace = "wedding-app"
   depends_on = [
     helm_release.cert-manager,
   ]

@@ -66,10 +66,10 @@ data "digitalocean_kubernetes_versions" "this" {
 }
 
 resource "digitalocean_kubernetes_cluster" "this" {
-  name         = "terraform-do-cluster"
-  region       = var.do_region
-  version      = data.digitalocean_kubernetes_versions.this.latest_version
-  auto_upgrade = true
+  name          = "terraform-do-cluster"
+  region        = var.do_region
+  version       = data.digitalocean_kubernetes_versions.this.latest_version
+  auto_upgrade  = true
   surge_upgrade = true
 
   node_pool {

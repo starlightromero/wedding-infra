@@ -87,12 +87,6 @@ resource "kubernetes_namespace" "wedding-app" {
   }
 }
 
-resource "kubernetes_namespace" "ingress" {
-  metadata {
-    name = "ingress"
-  }
-}
-
 resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
@@ -128,7 +122,7 @@ resource "helm_release" "cluster-issuer" {
 
 resource "helm_release" "nginx_ingress_chart" {
   name       = "nginx-ingress-controller"
-  namespace  = "ingress"
+  namespace  = "wedding-app"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "nginx-ingress-controller"
   set {
@@ -150,7 +144,7 @@ resource "kubernetes_ingress" "ingress" {
   ]
   metadata {
     name      = "${var.cluster_name}-ingress"
-    namespace = "ingress"
+    namespace = "wedding-app"
     annotations = {
       "kubernetes.io/ingress.class"          = "nginx"
       "ingress.kubernetes.io/rewrite-target" = "/"
@@ -163,7 +157,7 @@ resource "kubernetes_ingress" "ingress" {
       http {
         path {
           backend {
-            service_name = "${kubernetes_service.wedding.metadata.0.namespace}/${kubernetes_service.wedding.metadata.0.name}"
+            service_name = kubernetes_service.wedding.metadata.0.name
             service_port = 80
           }
           path = "/"

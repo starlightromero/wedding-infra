@@ -199,7 +199,6 @@ resource "kubernetes_service" "wedding" {
     selector = {
       app = kubernetes_deployment.wedding.metadata.0.labels.app
     }
-    session_affinity = "ClientIP"
     port {
       port        = 80
       target_port = 8080

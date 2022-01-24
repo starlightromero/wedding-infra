@@ -255,7 +255,7 @@ resource "kubernetes_deployment" "wedding" {
 
           liveness_probe {
             http_get {
-              path = "/"
+              path = "/health"
               port = 8080
             }
 

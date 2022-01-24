@@ -189,25 +189,25 @@ resource "kubernetes_ingress" "ingress" {
   }
 }
 
-resource "kubernetes_service" "wedding" {
-  metadata {
-    name      = "wedding"
-    namespace = "wedding-app"
-  }
-
-  spec {
-    selector = {
-      app = kubernetes_deployment.wedding.metadata.0.labels.app
-    }
-    session_affinity = "ClientIP"
-    port {
-      port        = 80
-      target_port = 8080
-    }
-
-    type = "ClusterIP"
-  }
-}
+#resource "kubernetes_service" "wedding" {
+#  metadata {
+#    name      = "wedding"
+#    namespace = "wedding-app"
+#  }
+#
+#  spec {
+#    selector = {
+#      app = kubernetes_deployment.wedding.metadata.0.labels.app
+#    }
+#    session_affinity = "ClientIP"
+#    port {
+#      port        = 80
+#      target_port = 8080
+#    }
+#
+#    type = "ClusterIP"
+#  }
+#}
 
 #resource "kubernetes_deployment" "wedding" {
 #  metadata {

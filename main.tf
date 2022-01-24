@@ -20,9 +20,7 @@ resource "digitalocean_project_resources" "this" {
 }
 
 resource "digitalocean_firewall" "web" {
-  name = "only-22-80-and-443"
-
-  droplet_ids = digitalocean_kubernetes_node_pool.this.nodes[*].droplet_id
+  name = "${var.cluster_name}-firewall"
 
   inbound_rule {
     protocol         = "tcp"
@@ -61,8 +59,6 @@ resource "digitalocean_loadbalancer" "this" {
     port     = 22
     protocol = "tcp"
   }
-
-  droplet_ids = digitalocean_kubernetes_node_pool.this.nodes[*].droplet_id
 }
 
 data "digitalocean_kubernetes_versions" "this" {
@@ -74,23 +70,15 @@ resource "digitalocean_kubernetes_cluster" "this" {
   region       = var.do_region
   version      = data.digitalocean_kubernetes_versions.this.latest_version
   auto_upgrade = true
+  surge_upgrade = true
 
   node_pool {
-    name       = "default-pool"
+    name       = "${var.cluster_name}-default-pool"
     size       = "s-1vcpu-2gb"
-    node_count = 1
+    auto_scale = true
+    min_nodes  = 2
+    max_nodes  = 10
   }
-}
-
-resource "digitalocean_kubernetes_node_pool" "this" {
-  cluster_id = digitalocean_kubernetes_cluster.this.id
-
-  name       = "app-pool"
-  size       = "s-2vcpu-4gb"
-  tags       = ["application"]
-  auto_scale = true
-  min_nodes  = 1
-  max_nodes  = 3
 }
 
 resource "kubernetes_namespace" "wedding-app" {

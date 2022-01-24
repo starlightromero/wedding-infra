@@ -97,7 +97,7 @@ resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
-  version    = "v1.0.1"
+  version    = "v1.6.1"
   namespace  = "kube-system"
   timeout    = 120
   depends_on = [
@@ -163,7 +163,7 @@ resource "kubernetes_ingress" "ingress" {
       http {
         path {
           backend {
-            service_name = kubernetes_service.wedding.metadata.0.name
+            service_name = "${replace(var.hostname, ".", "-")}-service"
             service_port = 80
           }
           path = "/"
@@ -171,7 +171,7 @@ resource "kubernetes_ingress" "ingress" {
       }
     }
     tls {
-      secret_name = "wedding-tls"
+      secret_name = "${replace(var.hostname, ".", "-")}-tls"
       hosts       = [var.hostname]
     }
   }

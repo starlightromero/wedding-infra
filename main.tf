@@ -189,81 +189,81 @@ resource "kubernetes_ingress" "ingress" {
   }
 }
 
-#resource "kubernetes_service" "wedding" {
-#  metadata {
-#    name      = "wedding"
-#    namespace = "wedding-app"
-#  }
-#
-#  spec {
-#    selector = {
-#      app = kubernetes_deployment.wedding.metadata.0.labels.app
-#    }
-#    session_affinity = "ClientIP"
-#    port {
-#      port        = 80
-#      target_port = 8080
-#    }
-#
-#    type = "ClusterIP"
-#  }
-#}
+resource "kubernetes_service" "wedding" {
+  metadata {
+    name      = "wedding"
+    namespace = "wedding-app"
+  }
 
-#resource "kubernetes_deployment" "wedding" {
-#  metadata {
-#    name      = "wedding"
-#    namespace = "wedding-app"
-#    labels = {
-#      app = "wedding"
-#    }
-#  }
-#
-#  spec {
-#    replicas = 3
-#
-#    selector {
-#      match_labels = {
-#        app = "wedding"
-#      }
-#    }
-#
-#    template {
-#      metadata {
-#        labels = {
-#          app = "wedding"
-#        }
-#      }
-#
-#      spec {
-#        container {
-#          image = "starlightromero/wedding-app"
-#          name  = "wedding-app"
-#          port {
-#            container_port = 8080
-#          }
-#
-#          resources {
-#            limits = {
-#              cpu    = "0.5"
-#              memory = "512Mi"
-#            }
-#            requests = {
-#              cpu    = "250m"
-#              memory = "50Mi"
-#            }
-#          }
-#
-#          liveness_probe {
-#            http_get {
-#              path = "/"
-#              port = 8080
-#            }
-#
-#            initial_delay_seconds = 5
-#            period_seconds        = 5
-#          }
-#        }
-#      }
-#    }
-#  }
-#}
+  spec {
+    selector = {
+      app = kubernetes_deployment.wedding.metadata.0.labels.app
+    }
+    session_affinity = "ClientIP"
+    port {
+      port        = 80
+      target_port = 8080
+    }
+
+    type = "ClusterIP"
+  }
+}
+
+resource "kubernetes_deployment" "wedding" {
+  metadata {
+    name      = "wedding"
+    namespace = "wedding-app"
+    labels = {
+      app = "wedding"
+    }
+  }
+
+  spec {
+    replicas = 3
+
+    selector {
+      match_labels = {
+        app = "wedding"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "wedding"
+        }
+      }
+
+      spec {
+        container {
+          image = "starlightromero/wedding-app"
+          name  = "wedding-app"
+          port {
+            container_port = 8080
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 8080
+            }
+
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
+        }
+      }
+    }
+  }
+}

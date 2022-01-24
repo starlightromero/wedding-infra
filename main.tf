@@ -163,7 +163,7 @@ resource "kubernetes_ingress" "ingress" {
       http {
         path {
           backend {
-            service_name = "${replace(var.hostname, ".", "-")}-service"
+            service_name = kubernetes_service.wedding.metadata.0.name
             service_port = 80
           }
           path = "/"

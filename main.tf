@@ -201,11 +201,11 @@ resource "kubernetes_service" "wedding" {
     }
     session_affinity = "ClientIP"
     port {
-      port        = 8080
-      target_port = 80
+      port        = 80
+      target_port = 8080
     }
 
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
 

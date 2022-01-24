@@ -171,7 +171,7 @@ resource "kubernetes_ingress" "ingress" {
       }
     }
     tls {
-      secret_name = "${replace(var.hostname, ".", "-")}-tls"
+      secret_name = "letsencrypt-production"
       hosts       = [var.hostname]
     }
   }

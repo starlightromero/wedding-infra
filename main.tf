@@ -191,7 +191,7 @@ resource "kubernetes_ingress" "ingress" {
 
 resource "kubernetes_service" "wedding" {
   metadata {
-    name      = "wedding-sevice"
+    name      = "wedding"
     namespace = "wedding-app"
   }
 
@@ -211,7 +211,7 @@ resource "kubernetes_service" "wedding" {
 
 resource "kubernetes_deployment" "wedding" {
   metadata {
-    name      = "wedding-deployment"
+    name      = "wedding"
     namespace = "wedding-app"
     labels = {
       app = "wedding"
@@ -256,7 +256,7 @@ resource "kubernetes_deployment" "wedding" {
           liveness_probe {
             http_get {
               path = "/health"
-              port = 80
+              port = 8080
             }
 
             initial_delay_seconds = 3

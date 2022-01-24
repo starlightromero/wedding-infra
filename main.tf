@@ -255,12 +255,12 @@ resource "kubernetes_deployment" "wedding" {
 
           liveness_probe {
             http_get {
-              path = "/health"
+              path = "/"
               port = 8080
             }
 
-            initial_delay_seconds = 3
-            period_seconds        = 3
+            initial_delay_seconds = 5
+            period_seconds        = 5
           }
         }
       }

@@ -19,7 +19,7 @@ resource "digitalocean_project_resources" "this" {
   ]
 }
 
-resource "digitalocean_firewall" "web" {
+resource "digitalocean_firewall" "this" {
   name = "${var.cluster_name}-firewall"
 
   inbound_rule {

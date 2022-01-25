@@ -222,6 +222,7 @@ resource "kubernetes_deployment" "wedding" {
           port {
             container_port = 8080
           }
+          imagePullPolicy = Always
 
           resources {
             limits = {

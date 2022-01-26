@@ -25,7 +25,7 @@ resource "digitalocean_firewall" "this" {
   inbound_rule {
     protocol         = "tcp"
     port_range       = "22"
-    source_addresses = ["75.128.58.244/24"]
+    source_addresses = ["75.128.58.244/32"]
   }
 
   inbound_rule {
@@ -161,6 +161,40 @@ resource "kubernetes_ingress" "ingress" {
             service_port = 80
           }
           path = "/"
+        }
+      }
+    }
+    tls {
+      secret_name = "letsencrypt-production"
+      hosts       = [var.hostname]
+    }
+  }
+}
+
+resource "kubernetes_ingress" "ingress-admin" {
+  depends_on = [
+    helm_release.nginx_ingress_chart,
+  ]
+  metadata {
+    name      = "${var.cluster_name}-ingress-admin"
+    namespace = "wedding-app"
+    annotations = {
+      "kubernetes.io/ingress.class"          = "nginx"
+      "ingress.kubernetes.io/rewrite-target" = "/"
+      "cert-manager.io/cluster-issuer"       = "letsencrypt-production"
+      "nginx.ingress.kubernetes.io/whitelist-source-range" = "75.128.58.244/32"
+    }
+  }
+  spec {
+    rule {
+      host = var.hostname
+      http {
+        path {
+          backend {
+            service_name = kubernetes_service.wedding.metadata.0.name
+            service_port = 80
+          }
+          path = "/rsvp"
         }
       }
     }

@@ -283,3 +283,130 @@ resource "kubernetes_deployment" "wedding" {
     }
   }
 }
+
+resource "kubernetes_service" "mongo" {
+  metadata {
+    name      = "mongo"
+    namespace = "wedding-app"
+  }
+
+  spec {
+    selector = {
+      app = kubernetes_stateful_set.mongo.metadata.0.labels.app
+    }
+    port {
+      port        = 27017
+      target_port = 27017
+    }
+
+    type = "ClusterIP"
+  }
+}
+
+
+resource "kubernetes_stateful_set" "mongo" {
+  metadata {
+    name = "mongo"
+    namespace = "wedding-app"
+  }
+
+  spec {
+    pod_management_policy  = "Parallel"
+    replicas               = 3
+
+    selector {
+      match_labels = {
+        name = "mongo"
+      }
+    }
+
+    service_name = "mongo"
+
+    template {
+      metadata {
+        labels = {
+          name = "mongo"
+        }
+
+        annotations = {}
+      }
+
+      spec {
+        service_account_name = "mongo"
+        termination_grace_period_seconds = 300
+
+        container {
+          name              = "mongo"
+          image             = "mongo"
+          image_pull_policy = "IfNotPresent"
+
+          args = [
+            "mongo",
+            "--bind_ip",
+            "0.0.0.0",
+            "--replSet",
+            "MainRepSet"
+          ]
+
+          port {
+            container_port = 27017
+          }
+
+          volume_mount {
+            name       = "mongo-persistent-storage-claim"
+            mount_path = "/data/db"
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.2"
+              memory = "200Mi"
+            }
+
+            requests = {
+              cpu    = "0.2"
+              memory = "200Mi"
+            }
+          }
+        }
+
+        volume {
+          name = "mongo"
+
+          config_map {
+            name = "mongo"
+          }
+        }
+      }
+    }
+
+    update_strategy {
+      type = "RollingUpdate"
+
+      rolling_update {
+        partition = 1
+      }
+    }
+
+    volume_claim_template {
+      metadata {
+        name = "mongo-persistent-storage-claim"
+	
+	annotations = {
+          "volume.beta.kubernetes.io/storage-class" = "standard"
+        }
+      }
+
+      spec {
+        access_modes       = ["ReadWriteOnce"]
+        storage_class_name = "standard"
+
+        resources {
+          requests = {
+            storage = "1Gi"
+          }
+        }
+      }
+    }
+  }
+}

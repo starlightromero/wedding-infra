@@ -308,6 +308,9 @@ resource "kubernetes_stateful_set" "mongo" {
   metadata {
     name = "mongo"
     namespace = "wedding-app"
+    labels {
+      app = "mongo"
+    }
   }
 
   spec {

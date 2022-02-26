@@ -66,7 +66,7 @@ data "digitalocean_kubernetes_versions" "this" {
 }
 
 resource "digitalocean_kubernetes_cluster" "this" {
-  name          = "terraform-do-cluster"
+  name          = var.cluster_name
   region        = var.do_region
   version       = data.digitalocean_kubernetes_versions.this.latest_version
   auto_upgrade  = true

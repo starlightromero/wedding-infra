@@ -1,0 +1,24 @@
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.62.0
+    hooks:
+      - id: checkov
+      - id: terraform_docs
+      - id: terraform_fmt
+      - id: terraform_providers_lock
+      - id: terraform_tflint
+        args:
+          - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
+      - id: terraform_tfsec
+        args:
+          - --args=--config-file=__GIT_WORKING_DIR__/.tfsec.yml
+      - id: terraform_validate
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace

@@ -1,4 +1,0 @@
-name: cluster-issuer
-description: ClusterIssuer
-version: 0.0.1
-kubeVersion: ">=1.10.0"

@@ -92,7 +92,7 @@ resource "digitalocean_kubernetes_cluster" "this" {
 
   node_pool {
     name       = "${var.cluster_name}-default-pool"
-    size       = "s-1vcpu-2gb"
+    size       = "s-1vcpu-1gb"
     auto_scale = true
     min_nodes  = 2
     max_nodes  = 9

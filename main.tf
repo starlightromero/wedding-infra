@@ -91,6 +91,15 @@ resource "digitalocean_kubernetes_cluster" "this" {
   }
 }
 
+resource "digitalocean_database_firewall" "this" {
+  cluster_id = digitalocean_database_cluster.this.id
+
+  rule {
+    type  = "k8s"
+    value = digitalocean_kubernetes_cluster.this.id
+  }
+}
+
 resource "digitalocean_database_cluster" "this" {
   name   = "${var.cluster_name}-db"
   region = var.do_region

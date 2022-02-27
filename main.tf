@@ -120,7 +120,7 @@ resource "digitalocean_database_cluster" "this" {
   node_count = 1
 
   maintenance_window {
-    day  = "sunday"
-    hour = "14:00"
+    day  = "monday"
+    hour = "06:00"
   }
 }

@@ -97,6 +97,11 @@ resource "digitalocean_kubernetes_cluster" "this" {
     min_nodes  = 2
     max_nodes  = 9
   }
+
+  maintenance_policy {
+    day        = "monday"
+    start_time = "7:00"
+  }
 }
 
 resource "digitalocean_database_firewall" "this" {
@@ -121,6 +126,6 @@ resource "digitalocean_database_cluster" "this" {
 
   maintenance_window {
     day  = "monday"
-    hour = "08:00"
+    hour = "7:00"
   }
 }

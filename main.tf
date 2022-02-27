@@ -48,6 +48,12 @@ resource "digitalocean_vpc" "this" {
   ip_range = "10.16.32.0/24"
 }
 
+resource "digitalocean_certificate" "this" {
+  name    = "${var.cluster_name}-cert"
+  type    = "lets_encrypt"
+  domains = [var.hostname]
+}
+
 resource "digitalocean_loadbalancer" "this" {
   name     = "${var.cluster_name}-lb"
   region   = var.do_region
@@ -61,6 +67,8 @@ resource "digitalocean_loadbalancer" "this" {
 
     target_port     = 80
     target_protocol = "http"
+
+    certificate_name = digitalocean_certificate.this.name
   }
 
   healthcheck {
@@ -110,4 +118,9 @@ resource "digitalocean_database_cluster" "this" {
   version    = "4"
   size       = "db-s-1vcpu-1gb"
   node_count = 1
+
+  maintenance_window {
+    day  = "sunday"
+    hour = "14:00"
+  }
 }

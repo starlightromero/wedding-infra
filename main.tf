@@ -121,6 +121,6 @@ resource "digitalocean_database_cluster" "this" {
 
   maintenance_window {
     day  = "monday"
-    hour = "06:00"
+    hour = "07:00"
   }
 }

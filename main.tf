@@ -85,12 +85,7 @@ resource "digitalocean_droplet" "this" {
 
   image    = "ubuntu-20-04-x64"
   size     = "s-1vcpu-1gb"
-  ssh_keys = [digitalocean_ssh_key.this.id]
-}
-
-resource "digitalocean_ssh_key" "this" {
-  name       = "Terraform"
-  public_key = file("/Users/starlight.romero/.ssh/digital_ocean.pub")
+  ssh_keys = ["d1:f8:9a:7d:24:c1:c1:b5:70:9a:fa:3c:3f:69:d4:b5"]
 }
 
 # data "digitalocean_kubernetes_versions" "this" {

@@ -15,8 +15,7 @@ resource "digitalocean_project_resources" "this" {
   resources = [
     digitalocean_domain.this.urn,
     digitalocean_loadbalancer.this.urn,
-    digitalocean_kubernetes_cluster.this.urn,
-    digitalocean_database_cluster.this.urn
+    digitalocean_kubernetes_cluster.this.urn
   ]
 }
 
@@ -101,31 +100,5 @@ resource "digitalocean_kubernetes_cluster" "this" {
   maintenance_policy {
     day        = "monday"
     start_time = "7:00"
-  }
-}
-
-resource "digitalocean_database_firewall" "this" {
-  cluster_id = digitalocean_database_cluster.this.id
-
-  rule {
-    type  = "k8s"
-    value = digitalocean_kubernetes_cluster.this.id
-  }
-}
-
-resource "digitalocean_database_cluster" "this" {
-  name   = "${var.cluster_name}-db"
-  region = var.do_region
-
-  private_network_uuid = digitalocean_vpc.this.id
-
-  engine     = "mongodb"
-  version    = "4"
-  size       = "db-s-1vcpu-1gb"
-  node_count = 1
-
-  maintenance_window {
-    day  = "monday"
-    hour = "7:00"
   }
 }

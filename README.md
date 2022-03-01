@@ -24,8 +24,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [digitalocean_database_cluster.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/database_cluster) | resource |
-| [digitalocean_database_firewall.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/database_firewall) | resource |
 | [digitalocean_domain.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/domain) | resource |
 | [digitalocean_firewall.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/firewall) | resource |
 | [digitalocean_kubernetes_cluster.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/kubernetes_cluster) | resource |

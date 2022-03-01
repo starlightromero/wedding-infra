@@ -1,3 +1,4 @@
 ---
 exclude:
   - digitalocean-compute-enforce-https
+  - digitalocean-compute-use-ssh-keys

@@ -15,7 +15,7 @@ resource "digitalocean_project_resources" "this" {
   resources = [
     digitalocean_domain.this.urn,
     digitalocean_loadbalancer.this.urn,
-    digitalocean_kubernetes_cluster.this.urn
+    digitalocean_droplet.this.urn
   ]
 }
 
@@ -74,31 +74,48 @@ resource "digitalocean_loadbalancer" "this" {
     port     = 22
     protocol = "tcp"
   }
+
+  droplet_ids = [digitalocean_droplet.this.id]
 }
 
-data "digitalocean_kubernetes_versions" "this" {
-  version_prefix = "1."
-}
-
-resource "digitalocean_kubernetes_cluster" "this" {
-  name     = var.cluster_name
+resource "digitalocean_droplet" "this" {
+  name     = "${var.cluster_name}-droplet"
   region   = var.do_region
   vpc_uuid = digitalocean_vpc.this.id
 
-  version       = data.digitalocean_kubernetes_versions.this.latest_version
-  auto_upgrade  = true
-  surge_upgrade = true
-
-  node_pool {
-    name       = "${var.cluster_name}-default-pool"
-    size       = "s-1vcpu-2gb"
-    auto_scale = true
-    min_nodes  = 2
-    max_nodes  = 9
-  }
-
-  maintenance_policy {
-    day        = "monday"
-    start_time = "7:00"
-  }
+  image    = "ubuntu-20-04-x64"
+  size     = "s-1vcpu-1gb"
+  ssh_keys = [digitalocean_ssh_key.this.id]
 }
+
+resource "digitalocean_ssh_key" "this" {
+  name       = "Terraform"
+  public_key = file("/Users/starlight.romero/.ssh/digital_ocean.pub")
+}
+
+# data "digitalocean_kubernetes_versions" "this" {
+#   version_prefix = "1."
+# }
+
+# resource "digitalocean_kubernetes_cluster" "this" {
+#   name     = var.cluster_name
+#   region   = var.do_region
+#   vpc_uuid = digitalocean_vpc.this.id
+
+#   version       = data.digitalocean_kubernetes_versions.this.latest_version
+#   auto_upgrade  = true
+#   surge_upgrade = true
+
+#   node_pool {
+#     name       = "${var.cluster_name}-default-pool"
+#     size       = "s-1vcpu-2gb"
+#     auto_scale = true
+#     min_nodes  = 2
+#     max_nodes  = 9
+#   }
+
+#   maintenance_policy {
+#     day        = "monday"
+#     start_time = "7:00"
+#   }
+# }

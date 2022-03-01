@@ -25,13 +25,13 @@ No modules.
 | Name | Type |
 |------|------|
 | [digitalocean_domain.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/domain) | resource |
+| [digitalocean_droplet.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/droplet) | resource |
 | [digitalocean_firewall.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/firewall) | resource |
-| [digitalocean_kubernetes_cluster.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/kubernetes_cluster) | resource |
 | [digitalocean_loadbalancer.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/loadbalancer) | resource |
 | [digitalocean_project.wedding](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/project) | resource |
 | [digitalocean_project_resources.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/project_resources) | resource |
+| [digitalocean_ssh_key.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/ssh_key) | resource |
 | [digitalocean_vpc.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/vpc) | resource |
-| [digitalocean_kubernetes_versions.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/data-sources/kubernetes_versions) | data source |
 
 ## Inputs
 

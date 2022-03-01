@@ -87,30 +87,3 @@ resource "digitalocean_droplet" "this" {
   size     = "s-1vcpu-1gb"
   ssh_keys = ["d1:f8:9a:7d:24:c1:c1:b5:70:9a:fa:3c:3f:69:d4:b5"]
 }
-
-# data "digitalocean_kubernetes_versions" "this" {
-#   version_prefix = "1."
-# }
-
-# resource "digitalocean_kubernetes_cluster" "this" {
-#   name     = var.cluster_name
-#   region   = var.do_region
-#   vpc_uuid = digitalocean_vpc.this.id
-
-#   version       = data.digitalocean_kubernetes_versions.this.latest_version
-#   auto_upgrade  = true
-#   surge_upgrade = true
-
-#   node_pool {
-#     name       = "${var.cluster_name}-default-pool"
-#     size       = "s-1vcpu-2gb"
-#     auto_scale = true
-#     min_nodes  = 2
-#     max_nodes  = 9
-#   }
-
-#   maintenance_policy {
-#     day        = "monday"
-#     start_time = "7:00"
-#   }
-# }

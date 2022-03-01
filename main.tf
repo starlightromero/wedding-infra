@@ -48,11 +48,11 @@ resource "digitalocean_vpc" "this" {
   ip_range = "10.16.32.0/24"
 }
 
-resource "digitalocean_certificate" "this" {
-  name    = "${var.cluster_name}-cert"
-  type    = "lets_encrypt"
-  domains = [var.hostname]
-}
+# resource "digitalocean_certificate" "this" {
+#   name    = "${var.cluster_name}-cert"
+#   type    = "lets_encrypt"
+#   domains = [var.hostname]
+# }
 
 resource "digitalocean_loadbalancer" "this" {
   name     = "${var.cluster_name}-lb"
@@ -68,7 +68,7 @@ resource "digitalocean_loadbalancer" "this" {
     target_port     = 80
     target_protocol = "http"
 
-    certificate_name = digitalocean_certificate.this.name
+    # certificate_name = digitalocean_certificate.this.name
   }
 
   healthcheck {

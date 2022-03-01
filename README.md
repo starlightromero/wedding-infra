@@ -36,10 +36,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | The name of the kubernetes cluster to create | `string` | `"wedding-app"` | no |
 | <a name="input_do_region"></a> [do\_region](#input\_do\_region) | Digital Ocean region | `string` | `"sfo3"` | no |
 | <a name="input_do_token"></a> [do\_token](#input\_do\_token) | Access Token for Digital Ocean | `string` | n/a | yes |
 | <a name="input_hostname"></a> [hostname](#input\_hostname) | Hostname of website | `string` | `"charrington.xyz"` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name of the kubernetes cluster to create | `string` | `"wedding-app"` | no |
 
 ## Outputs
 

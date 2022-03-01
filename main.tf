@@ -20,7 +20,7 @@ resource "digitalocean_project_resources" "this" {
 }
 
 resource "digitalocean_firewall" "this" {
-  name = "${var.cluster_name}-firewall"
+  name = "${var.name}-firewall"
 
   inbound_rule {
     protocol         = "tcp"
@@ -42,19 +42,19 @@ resource "digitalocean_firewall" "this" {
 }
 
 resource "digitalocean_vpc" "this" {
-  name     = "${var.cluster_name}-vpc"
+  name     = "${var.name}-vpc"
   region   = var.do_region
   ip_range = "10.16.32.0/24"
 }
 
 # resource "digitalocean_certificate" "this" {
-#   name    = "${var.cluster_name}-cert"
+#   name    = "${var.name}-cert"
 #   type    = "lets_encrypt"
 #   domains = [var.hostname]
 # }
 
 resource "digitalocean_loadbalancer" "this" {
-  name     = "${var.cluster_name}-lb"
+  name     = "${var.name}-lb"
   region   = var.do_region
   vpc_uuid = digitalocean_vpc.this.id
 
@@ -79,7 +79,7 @@ resource "digitalocean_loadbalancer" "this" {
 }
 
 resource "digitalocean_droplet" "this" {
-  name     = "${var.cluster_name}-droplet"
+  name     = "${var.name}-droplet"
   region   = var.do_region
   vpc_uuid = digitalocean_vpc.this.id
 

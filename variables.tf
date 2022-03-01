@@ -10,7 +10,7 @@ variable "do_region" {
   default     = "sfo3"
 }
 
-variable "cluster_name" {
+variable "name" {
   type        = string
   description = "The name of the kubernetes cluster to create"
   default     = "wedding-app"

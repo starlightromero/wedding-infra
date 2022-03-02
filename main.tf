@@ -67,7 +67,7 @@ resource "digitalocean_loadbalancer" "this" {
     target_port     = 80
     target_protocol = "http"
 
-    # certificate_name = digitalocean_certificate.this.name
+    certificate_name = digitalocean_certificate.this.name
   }
 
   healthcheck {

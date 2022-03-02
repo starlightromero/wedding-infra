@@ -24,6 +24,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [digitalocean_certificate.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/certificate) | resource |
 | [digitalocean_domain.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/domain) | resource |
 | [digitalocean_droplet.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/droplet) | resource |
 | [digitalocean_firewall.this](https://registry.terraform.io/providers/digitalocean/digitalocean/2.17.0/docs/resources/firewall) | resource |

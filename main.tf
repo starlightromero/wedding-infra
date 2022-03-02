@@ -47,11 +47,11 @@ resource "digitalocean_vpc" "this" {
   ip_range = "10.16.32.0/24"
 }
 
-# resource "digitalocean_certificate" "this" {
-#   name    = "${var.name}-cert"
-#   type    = "lets_encrypt"
-#   domains = [var.hostname]
-# }
+resource "digitalocean_certificate" "this" {
+  name    = "${var.name}-cert"
+  type    = "lets_encrypt"
+  domains = [var.hostname]
+}
 
 resource "digitalocean_loadbalancer" "this" {
   name     = "${var.name}-lb"

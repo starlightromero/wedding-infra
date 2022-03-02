@@ -39,6 +39,8 @@ resource "digitalocean_firewall" "this" {
     port_range                = "443"
     source_load_balancer_uids = [digitalocean_loadbalancer.this.id]
   }
+
+  droplet_ids = [digitalocean_droplet.this.id]
 }
 
 resource "digitalocean_vpc" "this" {

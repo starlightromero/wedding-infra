@@ -19,30 +19,6 @@ resource "digitalocean_project_resources" "this" {
   ]
 }
 
-resource "digitalocean_firewall" "this" {
-  name = "${var.name}-firewall"
-
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "22"
-    source_addresses = ["75.128.58.244/32"]
-  }
-
-  inbound_rule {
-    protocol                  = "tcp"
-    port_range                = "80"
-    source_load_balancer_uids = [digitalocean_loadbalancer.this.id]
-  }
-
-  inbound_rule {
-    protocol                  = "tcp"
-    port_range                = "443"
-    source_load_balancer_uids = [digitalocean_loadbalancer.this.id]
-  }
-
-  droplet_ids = [digitalocean_droplet.this.id]
-}
-
 resource "digitalocean_vpc" "this" {
   name     = "${var.name}-vpc"
   region   = var.do_region
